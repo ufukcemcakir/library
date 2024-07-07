@@ -11,47 +11,49 @@ function Book(title, author, pages, read) {
 }
 
 function addBookToLibrary(event) {
-    event.preventDefault(); // Prevent form from submitting normally
+    event.preventDefault();
 
-    // Get input values
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const pages = parseInt(document.getElementById('pages').value);
     const read = document.getElementById('read').checked;
 
-    // Create a new Book object
     const newBook = new Book(title, author, pages, read);
 
-    // Add the new book to the library array
     myLibrary.push(newBook);
 
-    // Clear the form
     document.getElementById('book-form').reset();
 
-    // Update the display
     displayLibrary();
 
     console.log("Book added to library:", newBook.info());
 }
 
 function displayLibrary() {
-    const libraryContainer = document.getElementById('library-container');
-    libraryContainer.innerHTML = ''; // Clear previous content
+    let libraryContainer = document.getElementById('library-container');
+    libraryContainer.innerHTML = '';
 
     myLibrary.forEach((book, index) => {
         const bookElement = document.createElement('div');
         bookElement.innerHTML = `
             <p>${book.info()}</p>
-            <button onclick="removeBook(${index})">Remove</button>
+            <button onclick="changeReading(${index})">Change Reading Status</button>
+            <button onclick="removeBook(${index})">Remove the Book</button>
         `;
         libraryContainer.appendChild(bookElement);
     });
 }
 
+function removeBook(index, div){
+myLibrary.splice(index,1);
+displayLibrary();
+}
 
+function changeReading(index){
+    myLibrary[index].read = !myLibrary[index].read;
+    displayLibrary();
+}
 
-// Add event listener to the form
 document.getElementById('book-form').addEventListener('submit', addBookToLibrary);
 
-// Initial display
 displayLibrary();
